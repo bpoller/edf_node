@@ -1,0 +1,10 @@
+{
+  "name": "edf_node",
+  "repository":"https://github.com/bpoller/edf_node",
+
+  "description": "akeru-->sigfox-->node-->elasticsearch-->kibana",
+  "version": "0.0.1",
+  "devDependencies": {
+    "restify": "*"
+  }
+}
