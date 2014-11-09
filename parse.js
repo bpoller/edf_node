@@ -28,7 +28,10 @@ function send(time, data){
   client.get(path,onReturn);
 
   function onReturn(err, req, res){
-    console.log("Request executed with code HTTP %d",res.statusCode);
+    
+     if(err){ console.log(err);}
+	else
+     console.log("Request executed with code HTTP %d",res.statusCode);
   }
 
 }
