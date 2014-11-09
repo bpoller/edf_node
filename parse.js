@@ -13,7 +13,7 @@ var client = restify.createJsonClient({
 var parser = parse({delimiter: ';'}, function(err, data){
   for(i = 0; i < data.length; i++){
 
-   var time = Date.parse(data[i][2]);
+   var time = Date.parse(data[i][2])/1000;
    var thedata = data[i][0]; 
 
    send(time,thedata);

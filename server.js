@@ -31,7 +31,7 @@ function toJson (vTime, vMeasurement, isPeakTariff){
 }
 
 function measurementTime(time, index){
-  return time + index*60000;
+  return new Date(time + index*60000).toISOString();
 }
 
 function extractMeasurement(data, i){
