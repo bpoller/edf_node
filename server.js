@@ -10,7 +10,7 @@ function process(req, res, next) {
   //transitionIndex is one-based zero means no transition took place.
   var transitionIndex = Number(extractTransitionIndex(data));
   for (i = 0; i < 10; i++) {
-  	save(toJson(measurementTime(time,i), extractMeasurement(data, i), tariff(transitionIndex, currentTariff, i)));
+  	console.log(toJson(measurementTime(time,i), extractMeasurement(data, i), tariff(transitionIndex, currentTariff, i)));
   }
 
   res.send(200);
@@ -36,7 +36,7 @@ function measurementTime(time, index){
 
 function extractMeasurement(data, i){
   var position = 4 + 2*i;
-  return Number(data.substring(position, position + 2));
+  return parseInt("0x"+data.substring(position, position + 2));
 }
 
 function tariff(transitionIndex, currentTariff, index){

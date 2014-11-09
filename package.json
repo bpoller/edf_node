@@ -5,6 +5,7 @@
   "description": "akeru-->sigfox-->node-->elasticsearch-->kibana",
   "version": "0.0.1",
   "devDependencies": {
-    "restify": "*"
+    "restify": "*",
+    "csv-parse":"*"
   }
 }
