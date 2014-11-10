@@ -7,8 +7,8 @@ function process(req, res, next) {
 
   var currentTariff = extractTariff(req.params.data)=="01";
 
-  //transitionIndex is one-based zero means no transition took place.
   var transitionIndex = Number(extractTransitionIndex(data));
+  
   for (i = 0; i < 10; i++) {
   	save(toJson(measurementTime(time,i), extractMeasurement(data, i), tariff(transitionIndex, currentTariff, i)));
   }
@@ -19,7 +19,7 @@ function process(req, res, next) {
 
 function save(payload){
   var path="/edf/measure/";
-  client.post(path,payload, onReturn);
+   client.post(path,payload, onReturn);
 
   function onReturn(err, req, res){
     console.log("Request executed with code HTTP %d",res.statusCode);
@@ -40,10 +40,15 @@ function extractMeasurement(data, i){
 }
 
 function tariff(transitionIndex, currentTariff, index){
-  if(transitionIndex >=index){
+  
+  if(transitionIndex == 0){
     return currentTariff;
-  } else {
-    return !currentTariff;
+  }else{
+    if(transitionIndex-1 <index){
+      return currentTariff;
+    } else {
+      return !currentTariff;
+    }
   }
 }
 
