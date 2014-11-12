@@ -10,15 +10,15 @@ function process(req, res, next) {
   var transitionIndex = Number(extractTransitionIndex(data));
   
   for (i = 0; i < 10; i++) {
-  	save(toJson(measurementTime(time,i), extractMeasurement(data, i), tariff(transitionIndex, currentTariff, i)));
+  	save(toJson(measurementTime(time,i), extractMeasurement(data, i), tariff(transitionIndex, currentTariff, i)),time);
   }
 
   res.send(200);
   next();
 }
 
-function save(payload){
-  var path="/edf/measure/";
+function save(payload,id){
+  var path="/edf/measure/"+id;
    client.post(path,payload, onReturn);
 
   function onReturn(err, req, res){
