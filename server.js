@@ -10,7 +10,7 @@ function process(req, res, next) {
   var transitionIndex = Number(extractTransitionIndex(data));
   
   for (i = 0; i < 10; i++) {
-  	save(toJson(measurementTime(time,i), extractMeasurement(data, i), tariff(transitionIndex, currentTariff, i)),time);
+  	save(toJson(measurementTime(time,i), extractMeasurement(data, i), tariff(transitionIndex, currentTariff, i)),time+i*60000);
   }
 
   res.send(200);
