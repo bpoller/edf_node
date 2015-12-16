@@ -1,0 +1,5 @@
+cluster:
+  name: bpo_es_cluster
+
+node:
+  name: node1
