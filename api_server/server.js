@@ -1,67 +1,46 @@
 var restify = require('restify');
+var server = restify.createServer();
+var client = restify.createJsonClient({
+  url: 'http://178.62.105.232:9200',
+  version: '*'
+});
 
-function process(req, res, next) {
-  
-  var time = req.params.time * 1000;
-  var data = req.params.data;
-
-  var currentTariff = extractTariff(req.params.data)=="01";
-
-  var transitionIndex = Number(extractTransitionIndex(data));
-  
-  for (i = 0; i < 10; i++) {
-  	save(toJson(measurementTime(time,i), extractMeasurement(data, i), tariff(transitionIndex, currentTariff, i)),time+i*60000);
-  }
-
-  res.send(200);
-  next();
-}
-
-function save(payload,id){
+function save(payload, id){
   var path="/edf/measure/"+id;
-   client.post(path,payload, onReturn);
+  client.post(path,payload, onReturn);
 
   function onReturn(err, req, res){
     console.log("Request executed with code HTTP %d",res.statusCode);
   }
 }
 
-function toJson (vTime, vMeasurement, isPeakTariff){
-  return {time:vTime, measurement:vMeasurement, tariff:isPeakTariff?"PEAK":"OFF_PEAK"};
+function isValid(params){
+  return typeof(parseInt(params.time))==="number" &&
+           typeof(parseInt(params.measurement)) === "number" &&
+           typeof(params.tariff)==="string" &&
+           (params.tariff==="PEAK" || params.tariff==="OFF_PEAK");
 }
 
-function measurementTime(time, index){
-  return new Date(time + index*60000).toISOString();
-}
-
-function extractMeasurement(data, i){
-  var position = 4 + 2*i;
-  return parseInt("0x"+data.substring(position, position + 2));
-}
-
-function tariff(transitionIndex, currentTariff, index){
-  
-  if(transitionIndex == 0){
-    return currentTariff;
-  }else{
-    if(transitionIndex-1 <index){
-      return currentTariff;
-    } else {
-      return !currentTariff;
-    }
+function process(req, res, next) {
+  var params = req.params;
+  if(isValid(params)){
+    save(toJson(params), parseInt(params.time));
   }
+  else {
+    console.log("There was an error in the request.");
+    console.log(params);
+  }
+  res.send(200);
+  next();
 }
 
-function extractTariff(data){
-  return data.substring(2, 4);
+function toJson (params){
+  return {time:new Date(parseInt(params.time)).toISOString(), measurement:parseInt(params.measurement), tariff:params.tariff};
 }
 
-function extractTransitionIndex(data){
-  return data.substring(1,2);
-}
 
-var server = restify.createServer();
 server.use(restify.queryParser());
+
 server.get('/data', process);
 
 server.get(/.*/,restify.serveStatic({
@@ -71,9 +50,4 @@ server.get(/.*/,restify.serveStatic({
 
 server.listen(8080, function() {
   console.log('%s listening at %s', server.name, server.url);
-});
-
-var client = restify.createJsonClient({
-  url: 'http://localhost:9200',
-  version: '*'
 });
