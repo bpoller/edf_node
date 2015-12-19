@@ -1,0 +1,11 @@
+{
+  "event": "bpo_edf_meter",
+  "url": "178.62.105.232:8080/data",
+  "requestType": "GET",
+  "query": {
+      "time": "{{SPARK_PUBLISHED_AT}}",
+      "measurement": "{{measurement}}",
+      "tariff":"{{tariff}}"
+  },
+  "mydevices": true
+}

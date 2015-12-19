@@ -15,7 +15,7 @@ function save(payload, id){
 }
 
 function isValid(params){
-  return typeof(parseInt(params.time))==="number" &&
+  return typeof(params.time)==="string" &&
            typeof(parseInt(params.measurement)) === "number" &&
            typeof(params.tariff)==="string" &&
            (params.tariff==="PEAK" || params.tariff==="OFF_PEAK");
@@ -24,7 +24,7 @@ function isValid(params){
 function process(req, res, next) {
   var params = req.params;
   if(isValid(params)){
-    save(toJson(params), parseInt(params.time));
+    save(toJson(params), new Date(params.time).getTime());
   }
   else {
     console.log("There was an error in the request.");
@@ -35,7 +35,7 @@ function process(req, res, next) {
 }
 
 function toJson (params){
-  return {time:new Date(parseInt(params.time)).toISOString(), measurement:parseInt(params.measurement), tariff:params.tariff};
+  return {time:params.time, measurement:parseInt(params.measurement), tariff:params.tariff};
 }
 
 
