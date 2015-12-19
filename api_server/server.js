@@ -14,28 +14,17 @@ function save(payload, id){
   }
 }
 
-function isValid(params){
-  return typeof(params.time)==="string" &&
-           typeof(parseInt(params.measurement)) === "number" &&
-           typeof(params.tariff)==="string" &&
-           (params.tariff==="PEAK" || params.tariff==="OFF_PEAK");
-}
-
 function process(req, res, next) {
   var params = req.params;
-  if(isValid(params)){
-    save(toJson(params), new Date(params.time).getTime());
-  }
-  else {
-    console.log("There was an error in the request.");
-    console.log(params);
-  }
+    save(toJson(params), new Date(params.published_at).getTime());
   res.send(200);
   next();
 }
 
 function toJson (params){
-  return {time:params.time, measurement:parseInt(params.measurement), tariff:params.tariff};
+  var data = params.data;
+  data.time = params.published_at;
+  return data;
 }
 
 

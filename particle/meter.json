@@ -1,11 +1,6 @@
 {
   "event": "bpo_edf_meter",
-  "url": "178.62.105.232:8080/data",
+  "url": "http://requestb.in/13ld4w01",
   "requestType": "GET",
-  "query": {
-      "time": "{{SPARK_PUBLISHED_AT}}",
-      "measurement": "{{measurement}}",
-      "tariff":"{{tariff}}"
-  },
   "mydevices": true
 }
