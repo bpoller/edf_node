@@ -22,7 +22,9 @@ function process(req, res, next) {
 }
 
 function toJson (params){
-  var data = params.data;
+  var theString = params.data.replace(/'/g,"\"");
+  console.log(theString);
+  var data = JSON.parse(theString);
   data.time = params.published_at;
   return data;
 }
