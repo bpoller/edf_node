@@ -32,7 +32,7 @@ function toJson (params){
 
 server.use(restify.queryParser());
 
-server.get('/data', process);
+server.get('/stuff', process);
 
 server.get(/.*/,restify.serveStatic({
 	directory:'./kibana',

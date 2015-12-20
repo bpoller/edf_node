@@ -1,6 +1,6 @@
 {
   "event": "bpo_edf_meter",
-  "url": "http://requestb.in/13ld4w01",
+  "url": "178.62.105.232:8080/stuff",
   "requestType": "GET",
   "mydevices": true
 }
