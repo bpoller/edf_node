@@ -14,25 +14,35 @@ function save(payload, id){
   }
 }
 
+function isValid(params){
+  return   typeof(parseInt(params.measurement)) === "number" &&
+           typeof(params.tariff)==="string" &&
+           (params.tariff==="PEAK" || params.tariff==="OFF_PEAK");
+}
+
 function process(req, res, next) {
   var params = req.params;
-    save(toJson(params), new Date(params.published_at).getTime());
+  var time = new Date();
+  if(isValid(params)){
+    console.log('saving...');
+    save(toJson(params,time), time.getTime());
+  }
+  else {
+    console.log("There was an error in the request.");
+    console.log(params);
+  }
   res.send(200);
   next();
 }
 
-function toJson (params){
-  var theString = params.data.replace(/'/g,"\"");
-  console.log(theString);
-  var data = JSON.parse(theString);
-  data.time = params.published_at;
-  return data;
+function toJson (params,time){
+  return {time:time.toISOString(), measurement:parseInt(params.measurement), tariff:params.tariff};
 }
 
 
 server.use(restify.queryParser());
 
-server.get('/stuff', process);
+server.get('/data', process);
 
 server.get(/.*/,restify.serveStatic({
 	directory:'./kibana',
