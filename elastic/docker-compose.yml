@@ -4,8 +4,8 @@ services:
   elastic:
     image: elasticsearch:5.1
     volumes:
-    - "./data:/usr/share/elasticsearch/data"
-    - "./config:/usr/share/elasticsearch/config"
+    - "./elastic/data:/usr/share/elasticsearch/data"
+    - "./elastic/config:/usr/share/elasticsearch/config"
 
   kibana:
     image: kibana:5.1
