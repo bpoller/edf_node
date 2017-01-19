@@ -1,0 +1,29 @@
+version: '2'
+
+services:
+  elastic:
+    image: elasticsearch:5.1
+    volumes:
+    - "./data:/usr/share/elasticsearch/data"
+    - "./config:/usr/share/elasticsearch/config"
+
+  kibana:
+    image: kibana:5.1
+    environment:
+      - ELASTICSEARCH_URL=http://elastic:9200
+    depends_on:
+      - elastic
+
+  nginx:
+    image: nginx:1.10-alpine
+    volumes:
+      - "./nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
+      - "./nginx/passwords:/etc/nginx/passwords:ro"
+
+    ports:
+      - "5601:5601"
+      - "9200:9200"
+      - "9300:9300"
+    depends_on:
+      - elastic
+      - kibana

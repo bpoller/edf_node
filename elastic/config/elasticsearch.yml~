@@ -1,5 +1,0 @@
-cluster:
-  name: innoside_es_cluster
-
-node:
-  name: node1
